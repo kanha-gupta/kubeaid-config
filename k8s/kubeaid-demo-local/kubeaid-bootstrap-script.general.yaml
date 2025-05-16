@@ -1,0 +1,12 @@
+forkURLs:
+  kubeaid: https://github.com/Obmondo/kubeaid
+  kubeaidConfig: https://github.com/kanha-gupta/kubeaid-config
+
+cluster:
+  name: kubeaid-demo-local
+  k8sVersion: v1.31.0
+  kubeaidVersion: 12.0.0 # update this accordingly
+
+cloud:
+  local: {}
+
