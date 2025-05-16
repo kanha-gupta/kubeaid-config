@@ -13,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: kubeaid
   sources:
-    - repoURL: https://github.com/Obmondo/kubeaid
+    - repoURL: https://github.com/Obmondo/KubeAid
       path: argocd-helm-charts/cert-manager
       targetRevision: 12.0.0
       helm:
