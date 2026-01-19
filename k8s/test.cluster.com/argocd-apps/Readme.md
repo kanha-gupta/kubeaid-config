@@ -1,3 +1,3 @@
-# Info
+# ArgoCD Apps
 
-This folder contains charts specific values file. This is where you pass values to charts based on your requirements
+This directory contains chart-specific value files used to configure services according to your requirements.
