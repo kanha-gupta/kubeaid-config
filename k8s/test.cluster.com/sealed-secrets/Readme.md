@@ -1,3 +1,5 @@
-# Info
+# Sealed Secrets
 
-This folder contains sealed secrets if any. Generally we prefer creating a folder each of namespace and then add the sealed secrets file to NS folder
+This directory contains sealed secrets.
+
+**Recommendation:** Create a subdirectory for each namespace and place the corresponding sealed secrets files within them.
