@@ -1,8 +1,7 @@
-# Cluster folders
+# Clusters Directory
 
-This folder contains your cluster specific folder.
-For eg, if you cluster name is `test.cluster.com` you should add a folder with that name in this directory.
+This directory contains configurations for your clusters. Create a subdirectory for each cluster using its domain name (e.g., `test.cluster.com`).
 
-We already support lots of [charts](https://github.com/Obmondo/k8id/tree/master/argocd-helm-charts), but if
-you want to add more charts based on your need you can create a `argocd-helm-charts` folder here and add your charts
-there.
+## Custom Charts
+
+While KubeAid supports many [standard charts](https://github.com/Obmondo/k8id/tree/master/argocd-helm-charts), you can add custom charts by creating an `argocd-helm-charts` directory here.
