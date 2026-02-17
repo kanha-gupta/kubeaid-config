@@ -19,9 +19,9 @@ cluster:
   argoCD:
     deployKeys:
       kubeaidConfig:
-        privateKeyFilePath: /home/kanha/kubeaid-cli/.rsa-key
+        privateKeyFilePath: /home/kanha/.ssh/id_rsa
       kubeaid:
-        privateKeyFilePath: /home/kanha/kubeaid-cli/.rsa-key
+        privateKeyFilePath: /home/kanha/.ssh/id_rsa
 
 cloud:
   hetzner:
