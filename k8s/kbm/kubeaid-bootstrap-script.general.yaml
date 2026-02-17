@@ -1,0 +1,68 @@
+git:
+  privateKeyFilePath: /home/kanha/.ssh/id_rsa
+
+forkURLs:
+  kubeaid:
+    url: git@github.com:Obmondo/KubeAid.git
+    version: 23.0.0
+  kubeaidConfig:
+    url: git@github.com:kanha-gupta/kubeaid-config.git
+
+    directory: kbm
+
+cluster:
+  name: kbm
+  k8sVersion: v1.33.0
+  additionalUsers:
+    - name: kanha
+      sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDrZUngx3q3VoStfcXH7OL6zon6T0hEQq0q4XWd+piox64w8fFKH5e2JGGbB6bUAxh199O3jpKpzy5j5eS5XnerJ5Fhowjuur92259k8mnDqDz7zpAYtXw8aEyYaiNLjb+N9CFGNQx9ro5nJMqIUzOhzuYQBs1yqZ9XozjynQPiaoHRzFjdJFMrhOiL50WX1eoZqORByfP4WZMcGdCYYTZB8XpdQjEH9OG1p9HDIdSrS5g9BzVS+NcArJ95wiNLgFCTvAoYcReV/gC8GufZNn+Crxo1FCv7RZP+EcLlDHFxKImyZ7j2nj/cRj6nmYgkpl9W99WQ2h69k45rvER0Nof8iUVfEvHGBwgQe6TDSnaOGoQ//pjPdIw5kcRfvU0cLE/Z6yO2GRPseMpa06c8eStqqAY5hN87VGqc3ZNJRhVKxA2JmrOMVrYZ2jPAHXpTWXAK8lIkOtCIpu4f11b1GUryuHEg90E0t2SG8jCahNMwuWeLuPI8EXh+JCJ8ROqsnk1D/xNB6WjW6rMmcK53iPZTJ6KIgwP6q6epOuQ+J/v6mI45SZWCgIfSQiRocZilFjW6d8qYd8apH88HQgB7Nzc4ajgeCxF3p3wu2l1bqG0zAYNThYCSjDHtj1Y34hSvobbpIwAY6kFfy/dmS3kW+rXoOadkSNJxp6E+GWs+XO6BtQ== cardno:000613819983 Kanha
+  argoCD:
+    deployKeys:
+      kubeaidConfig:
+        privateKeyFilePath: /home/kanha/kubeaid-cli/.rsa-key
+      kubeaid:
+        privateKeyFilePath: /home/kanha/kubeaid-cli/.rsa-key
+
+cloud:
+  hetzner:
+    mode: bare-metal
+    vswitch:
+      vlanID: 1001
+      name: test
+    bareMetal:
+      wipeDisks: true
+      sshKeyPair:
+        name: kbm-cluster
+        publicKeyFilePath: /home/kanha/kbm/ssh-key.pub
+        privateKeyFilePath: /home/kanha/kbm/ssh-key
+    controlPlane:
+      bareMetal:
+        endpoint:
+          isFailoverIP: true
+          host: 95.216.30.44
+        bareMetalHosts:
+          - serverID: 1455726 # ax41na
+          - serverID: 1455733 # ax41nb
+          - serverID: 1455734 # ax41nc
+        zfs:
+          size: 462
+
+      regions:  [fsn1, nbg1, hel1]
+
+    # Details about node-groups in Hetzner.
+    #
+    nodeGroups:
+      bareMetal:
+        # each server has 2 1.8TB HDD disks and we will set up ceph
+        - name: ceph
+          labels:
+            node-role.kubernetes.io/ceph: ''
+            node.cluster.x-k8s.io/nodegroup: ceph
+          taints: [ ]
+          zfs:
+            size: 350
+          bareMetalHosts:
+            - serverID: '1414813'  # ax41a
+            - serverID: '1454837'  # ax41b
+            - serverID: '1454838'  # ax41c
+

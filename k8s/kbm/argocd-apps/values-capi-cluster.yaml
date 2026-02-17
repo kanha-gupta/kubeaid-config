@@ -1,0 +1,154 @@
+global:
+  clusterName: kbm
+  kubernetes:
+    version: v1.33.0
+  kubeaid:
+    repo: git@github.com:Obmondo/KubeAid.git
+  kubeaidConfig:
+    repo: git@github.com:kanha-gupta/kubeaid-config.git
+  additionalUsers: 
+    - name: kanha
+      sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDrZUngx3q3VoStfcXH7OL6zon6T0hEQq0q4XWd+piox64w8fFKH5e2JGGbB6bUAxh199O3jpKpzy5j5eS5XnerJ5Fhowjuur92259k8mnDqDz7zpAYtXw8aEyYaiNLjb+N9CFGNQx9ro5nJMqIUzOhzuYQBs1yqZ9XozjynQPiaoHRzFjdJFMrhOiL50WX1eoZqORByfP4WZMcGdCYYTZB8XpdQjEH9OG1p9HDIdSrS5g9BzVS+NcArJ95wiNLgFCTvAoYcReV/gC8GufZNn+Crxo1FCv7RZP+EcLlDHFxKImyZ7j2nj/cRj6nmYgkpl9W99WQ2h69k45rvER0Nof8iUVfEvHGBwgQe6TDSnaOGoQ//pjPdIw5kcRfvU0cLE/Z6yO2GRPseMpa06c8eStqqAY5hN87VGqc3ZNJRhVKxA2JmrOMVrYZ2jPAHXpTWXAK8lIkOtCIpu4f11b1GUryuHEg90E0t2SG8jCahNMwuWeLuPI8EXh+JCJ8ROqsnk1D/xNB6WjW6rMmcK53iPZTJ6KIgwP6q6epOuQ+J/v6mI45SZWCgIfSQiRocZilFjW6d8qYd8apH88HQgB7Nzc4ajgeCxF3p3wu2l1bqG0zAYNThYCSjDHtj1Y34hSvobbpIwAY6kFfy/dmS3kW+rXoOadkSNJxp6E+GWs+XO6BtQ== cardno:000613819983 Kanha
+provider:
+  hetzner: true
+
+hetzner:
+  mode: bare-metal
+  bareMetal:
+    wipeDisks: true
+    sshKeyPair:
+      name: kbm-cluster
+    installImage: 
+      imagePath: /root/.oldroot/nfs/images/Ubuntu-2404-noble-amd64-base.tar.gz
+      vg0:
+        size: 80
+        rootVolumeSize: 50
+
+  controlPlane:
+    regions: 
+      - fsn1
+      - nbg1
+      - hel1
+
+    
+    
+    bareMetal:
+      endpoint: 
+        isFailoverIP: true
+        host: 95.216.30.44
+      bareMetalHosts: 
+        - serverID: "1455726"
+        - serverID: "1455733"
+        - serverID: "1455734"
+      diskLayoutSetupCommands: |
+        set -e
+
+        apt-get update -y
+        apt install zfsutils-linux -y
+
+        # Create necessary partitions.
+          echo ",1K,L" | sfdisk -N 4 /dev/nvme0n1 --force --no-reread
+          echo ",462G,L" | sfdisk -N 5 /dev/nvme0n1 --force --no-reread
+
+          echo ",,L" | sfdisk -N 6 /dev/nvme0n1 --force --no-reread
+
+          partprobe /dev/nvme0n1
+          udevadm settle
+          echo ",1K,L" | sfdisk -N 4 /dev/nvme1n1 --force --no-reread
+          echo ",462G,L" | sfdisk -N 5 /dev/nvme1n1 --force --no-reread
+
+          echo ",,L" | sfdisk -N 6 /dev/nvme1n1 --force --no-reread
+
+          partprobe /dev/nvme1n1
+          udevadm settle
+
+        if zpool import -f primary >/dev/null 2>&1; then
+          echo "Imported existing primary ZFS pool"
+        else
+          # Create the ZFS pool with RAIDZ-1 enabled.
+            zpool create primary raidz1 \
+              /dev/nvme0n1p5 \ 
+              /dev/nvme1n1p5
+
+          # Create the filesystem for ContainerD, to store container images.
+          zfs create pool/containerd
+          zfs set mountpoint=/var/lib/containerd pool/containerd
+
+          # Create the filesystem where pod logs will be stored.
+          zfs create pool/pod-logs
+          zfs set mountpoint=/var/log/pods pool/pod-logs
+
+          # Create the filesystem where pod ephemeral volumes will be stored.
+          zfs create pool/pod-ephemeral-volumes
+          zfs set mountpoint=/var/lib/kubelet/pods pool/pod-ephemeral-volumes
+
+          # Enable weekly ZPool trimming for the ZPool.
+          # So unused storage space will be reclaimed back, into the ZFS pool.
+          # REFER : https://openzfs.github.io/openzfs-docs/man/master/8/zpool-trim.8.html.
+          systemctl enable zfs-trim-weekly@rpool.timer --now
+        fi
+
+    
+
+  nodeGroups:
+    hcloud: 
+      []
+
+    bareMetal:
+      - name: ceph
+        hosts: 
+        - serverID: "1414813"
+        - serverID: "1454837"
+        - serverID: "1454838"
+        diskLayoutSetupCommands: |
+          set -e
+
+          apt-get update -y
+          apt install zfsutils-linux -y
+
+          # Create necessary partitions.
+            echo ",1K,L" | sfdisk -N 4 /dev/sda --force --no-reread
+            echo ",350G,L" | sfdisk -N 5 /dev/sda --force --no-reread
+
+            echo ",,L" | sfdisk -N 6 /dev/sda --force --no-reread
+
+            partprobe /dev/sda
+            udevadm settle
+            echo ",1K,L" | sfdisk -N 4 /dev/sdb --force --no-reread
+            echo ",350G,L" | sfdisk -N 5 /dev/sdb --force --no-reread
+
+            echo ",,L" | sfdisk -N 6 /dev/sdb --force --no-reread
+
+            partprobe /dev/sdb
+            udevadm settle
+
+          if zpool import -f primary >/dev/null 2>&1; then
+            echo "Imported existing primary ZFS pool"
+          else
+            # Create the ZFS pool with RAIDZ-1 enabled.
+            zpool create primary raidz1 \
+              /dev/sda5 \ 
+              /dev/sdb5
+
+            # Create the filesystem for ContainerD, to store container images.
+            zfs create pool/containerd
+            zfs set mountpoint=/var/lib/containerd pool/containerd
+
+            # Create the filesystem where pod logs will be stored.
+            zfs create pool/pod-logs
+            zfs set mountpoint=/var/log/pods pool/pod-logs
+
+            # Create the filesystem where pod ephemeral volumes will be stored.
+            zfs create pool/pod-ephemeral-volumes
+            zfs set mountpoint=/var/lib/kubelet/pods pool/pod-ephemeral-volumes
+
+            # Enable weekly ZPool trimming for the ZPool.
+            # So unused storage space will be reclaimed back, into the ZFS pool.
+            # REFER : https://openzfs.github.io/openzfs-docs/man/master/8/zpool-trim.8.html.
+            systemctl enable zfs-trim-weekly@rpool.timer --now
+          fi
+        labels: 
+        node-role.kubernetes.io/ceph: ""
+        node.cluster.x-k8s.io/nodegroup: ceph
+        taints: 
+        []
