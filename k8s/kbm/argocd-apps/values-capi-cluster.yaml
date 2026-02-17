@@ -146,9 +146,3 @@ hetzner:
             # So unused storage space will be reclaimed back, into the ZFS pool.
             # REFER : https://openzfs.github.io/openzfs-docs/man/master/8/zpool-trim.8.html.
             systemctl enable zfs-trim-weekly@rpool.timer --now
-          fi
-        labels: 
-        node-role.kubernetes.io/ceph: ""
-        node.cluster.x-k8s.io/nodegroup: ceph
-        taints: 
-        []
