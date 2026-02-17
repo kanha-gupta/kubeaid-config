@@ -96,7 +96,12 @@ hetzner:
 
     bareMetal:
       - name: ceph
-        hosts: 
+        labels: 
+        node-role.kubernetes.io/ceph: ""
+        node.cluster.x-k8s.io/nodegroup: ceph
+        taints: 
+        []
+        bareMetalHosts: 
         - serverID: "1414813"
         - serverID: "1454837"
         - serverID: "1454838"
@@ -147,8 +152,3 @@ hetzner:
             # REFER : https://openzfs.github.io/openzfs-docs/man/master/8/zpool-trim.8.html.
             systemctl enable zfs-trim-weekly@rpool.timer --now
           fi
-        labels: 
-        node-role.kubernetes.io/ceph: ""
-        node.cluster.x-k8s.io/nodegroup: ceph
-        taints: 
-        []
