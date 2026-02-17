@@ -96,7 +96,7 @@ hetzner:
 
     bareMetal:
       - name: ceph
-        hosts: 
+        bareMetalHosts: 
         - serverID: "1414813"
         - serverID: "1454837"
         - serverID: "1454838"
