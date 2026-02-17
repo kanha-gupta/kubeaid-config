@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    kubeaid.io/version: 23.0.0
+    kubeaid.io/managed-by: kubeaid
+    kubeaid.io/sync-order: "10"
+  name: ccm-hetzner
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: kubeaid
+  sources:
+    - repoURL: git@github.com:Obmondo/KubeAid.git
+      path: argocd-helm-charts/ccm-hetzner
+      targetRevision: 23.0.0
+      helm:
+        valueFiles:
+          - $values/k8s/kbm/argocd-apps/values-ccm-hetzner.yaml
+    - repoURL: git@github.com:kanha-gupta/kubeaid-config.git
+      targetRevision: HEAD
+      ref: values
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
