@@ -89,9 +89,6 @@ hetzner:
     
 
   nodeGroups:
-    hcloud: 
-      []
-
     bareMetal:
       - name: ceph
         labels:
