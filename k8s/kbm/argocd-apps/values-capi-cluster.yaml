@@ -18,11 +18,11 @@ hetzner:
     wipeDisks: true
     sshKeyPair:
       name: kbm-cluster
-    installImage: 
+    installImage:
       imagePath: /root/.oldroot/nfs/images/Ubuntu-2404-noble-amd64-base.tar.gz
       vg0:
-        size: 80
-        rootVolumeSize: 50
+        size: "80G"
+        rootVolumeSize: "50G"
 
   controlPlane:
     regions: 
