@@ -41,9 +41,9 @@ cloud:
           isFailoverIP: true
           host: 95.216.30.44
         bareMetalHosts:
-          - serverID: 1455726 # ax41na
-          - serverID: 1455733 # ax41nb
-          - serverID: 1455734 # ax41nc
+          - serverID: 1455726 # ax41na 135.181.21.167
+          - serverID: 1455733 # ax41nb 135.181.21.154
+          - serverID: 1455734 # ax41nc 135.181.21.153
         zfs:
           size: 462
 
@@ -62,7 +62,7 @@ cloud:
           zfs:
             size: 350
           bareMetalHosts:
-            - serverID: '1414813'  # ax41a
-            - serverID: '1454837'  # ax41b
-            - serverID: '1454838'  # ax41c
+            - serverID: '1414813'  # ax41a 135.181.223.235
+            - serverID: '1454837'  # ax41b 65.21.130.86
+            - serverID: '1454838'  # ax41c 65.21.130.85
 
