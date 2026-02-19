@@ -39,16 +39,16 @@ hetzner:
       bareMetalHosts: 
         - serverID: "1455726"
           wwns:
-            - eui.002538b411b1ac41
             - eui.002538b411b1ab93
+            - eui.002538b411b1ac41
         - serverID: "1455733"
           wwns:
-            - eui.002538b411b1a952
             - eui.002538b411b1a955
+            - eui.002538b411b1a952
         - serverID: "1455734"
           wwns:
-            - eui.002538b951b25f90
             - eui.002538b411b1ac2d
+            - eui.002538b951b25f90
       diskLayoutSetupCommands: |
         set -e
 
@@ -74,8 +74,8 @@ hetzner:
         if zpool import -f primary >/dev/null 2>&1; then
           echo "Imported existing primary ZFS pool"
         else
-          # Create the ZFS pool with RAIDZ-1 enabled.
-            zpool create primary raidz1 \/dev/nvme0n1p5 \/dev/nvme1n1p5
+          # Create the ZFS pool as a mirror.
+          zpool create primary mirror /dev/nvme0n1p5 /dev/nvme1n1p5
 
           # Create the filesystem for ContainerD, to store container images.
           zfs create primary/containerd
@@ -92,7 +92,7 @@ hetzner:
           # Enable weekly ZPool trimming for the ZPool.
           # So unused storage space will be reclaimed back, into the ZFS pool.
           # REFER : https://openzfs.github.io/openzfs-docs/man/master/8/zpool-trim.8.html.
-          systemctl enable zfs-trim-weekly@rpool.timer --now
+          systemctl enable zfs-trim-weekly@primary.timer --now
         fi
 
     
@@ -143,10 +143,8 @@ hetzner:
           if zpool import -f primary >/dev/null 2>&1; then
             echo "Imported existing primary ZFS pool"
           else
-            # Create the ZFS pool with RAIDZ-1 enabled.
-            zpool create primary raidz1 \
-              /dev/sda5 \ 
-              /dev/sdb5
+            # Create the ZFS pool as a mirror.
+            zpool create primary mirror /dev/sda5 /dev/sdb5
 
             # Create the filesystem for ContainerD, to store container images.
             zfs create primary/containerd
@@ -163,5 +161,5 @@ hetzner:
             # Enable weekly ZPool trimming for the ZPool.
             # So unused storage space will be reclaimed back, into the ZFS pool.
             # REFER : https://openzfs.github.io/openzfs-docs/man/master/8/zpool-trim.8.html.
-            systemctl enable zfs-trim-weekly@rpool.timer --now
+            systemctl enable zfs-trim-weekly@primary.timer --now
           fi
