@@ -32,7 +32,7 @@ cloud:
     bareMetal:
       wipeDisks: true
       sshKeyPair:
-        name: kbm-cluster
+        name: cluster
         publicKeyFilePath: /home/kanha/kbm/ssh-key.pub
         privateKeyFilePath: /home/kanha/kbm/ssh-key
     controlPlane:
