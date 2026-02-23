@@ -39,15 +39,15 @@ hetzner:
       bareMetalHosts: 
         - serverID: "1455726"
           wwns:
-            - eui.002538b411b1ab93
-            - eui.002538b411b1ac41
+            - eui.002538b341beb77c
+            - eui.002538b121b71e1e
         - serverID: "1455733"
           wwns:
-            - eui.002538b411b1a955
-            - eui.002538b411b1a952
+            - eui.002538b421001844
+            - eui.002538ba51b16ee7
         - serverID: "1455734"
           wwns:
-            - eui.002538b411b1ac2d
+            - eui.002538ba51b16ee5
             - eui.002538b951b25f90
       diskLayoutSetupCommands: |
         set -e
