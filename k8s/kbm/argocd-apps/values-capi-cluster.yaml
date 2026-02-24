@@ -39,8 +39,8 @@ hetzner:
       bareMetalHosts: 
         - serverID: "1455726"
           wwns:
-            - eui.002538b121b71e1e
             - eui.002538b341beb77c
+            - eui.002538b121b71e1e
         - serverID: "1455733"
           wwns:
             - eui.002538ba51b16ee7
@@ -56,14 +56,14 @@ hetzner:
         apt install zfsutils-linux -y
 
         # Create necessary partitions.
-          echo ",1K,L" | sfdisk -N 4 /dev/nvme0n1 --force --no-reread
+          echo ",,E" | sfdisk -N 4 /dev/nvme0n1 --force --no-reread
           echo ",462G,L" | sfdisk -N 5 /dev/nvme0n1 --force --no-reread
 
           echo ",,L" | sfdisk -N 6 /dev/nvme0n1 --force --no-reread
 
           partprobe /dev/nvme0n1
           udevadm settle
-          echo ",1K,L" | sfdisk -N 4 /dev/nvme1n1 --force --no-reread
+          echo ",,E" | sfdisk -N 4 /dev/nvme1n1 --force --no-reread
           echo ",462G,L" | sfdisk -N 5 /dev/nvme1n1 --force --no-reread
 
           echo ",,L" | sfdisk -N 6 /dev/nvme1n1 --force --no-reread
@@ -125,14 +125,14 @@ hetzner:
           apt install zfsutils-linux -y
 
           # Create necessary partitions.
-            echo ",1K,L" | sfdisk -N 4 /dev/sda --force --no-reread
+            echo ",,E" | sfdisk -N 4 /dev/sda --force --no-reread
             echo ",350G,L" | sfdisk -N 5 /dev/sda --force --no-reread
 
             echo ",,L" | sfdisk -N 6 /dev/sda --force --no-reread
 
             partprobe /dev/sda
             udevadm settle
-            echo ",1K,L" | sfdisk -N 4 /dev/sdb --force --no-reread
+            echo ",,E" | sfdisk -N 4 /dev/sdb --force --no-reread
             echo ",350G,L" | sfdisk -N 5 /dev/sdb --force --no-reread
 
             echo ",,L" | sfdisk -N 6 /dev/sdb --force --no-reread
