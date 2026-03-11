@@ -1,0 +1,29 @@
+git:
+  privateKeyFilePath: /Users/dev/.ssh/id_rsa
+
+forkURLs:
+  kubeaid:
+    url: git@github.com:Obmondo/KubeAid.git
+    version: 23.0.0
+  kubeaidConfig:
+    url: git@github.com:kanha-gupta/kubeaid-config.git
+    directory: test-local
+
+cluster:
+  name: test-local
+  k8sVersion: v1.35.0
+  argoCD:
+    deployKeys:
+      kubeaidConfig:
+        privateKeyFilePath: /Users/dev/.ssh/id_rsa
+      kubeaid:
+        privateKeyFilePath: /Users/dev/.ssh/id_rsa
+
+cloud:
+  local: {}
+
+kubePrometheus:
+  version: v0.15.0
+  grafanaURL:
+
+
