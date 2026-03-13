@@ -13,7 +13,7 @@ forkURLs:
 cluster:
   type: "workload"
   name: "test-bare-metal"
-  k8sVersion: "1.35.0"
+  k8sVersion: "1.33.0"
   enableAuditLogging: true
   argoCD:
     deployKeys:
