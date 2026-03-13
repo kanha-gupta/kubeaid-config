@@ -1,0 +1,50 @@
+git:
+  # Path to your GitHub SSH key for pulling repos
+  privateKeyFilePath: "/Users/dev/.ssh/id_rsa"
+
+forkURLs:
+  kubeaid:
+    url: "git@github.com:Obmondo/KubeAid.git"
+    version: "23.0.0"
+  kubeaidConfig:
+    url: "git@github.com:kanha-gupta/kubeaid-config.git"
+    directory: "test-bare-metal"
+
+cluster:
+  type: "workload"
+  name: "test-bare-metal"
+  k8sVersion: "1.35.0"
+  enableAuditLogging: true
+  argoCD:
+    deployKeys:
+      kubeaidConfig:
+        privateKeyFilePath: "/Users/dev/.ssh/id_rsa"
+      kubeaid:
+        privateKeyFilePath: "/Users/dev/.ssh/id_rsa"
+
+cloud:
+  bare-metal:
+    ssh:
+      port: 22
+      privateKey:
+        # Your specific key for these servers
+        privateKeyFilePath: "/Users/dev/enableit/test-kubeaid-cli/robot-priv"
+
+    controlPlane:
+      endpoint:
+        host: "135.181.223.235" # Public IP of the control plane
+        port: 6443
+      hosts:
+        - publicAddress: "135.181.223.235"
+          privateAddress: "135.181.223.235"
+
+    nodeGroups:
+      - name: "worker-pool"
+        labels:
+          "node-role.kubernetes.io/worker": ""
+        hosts:
+          - publicAddress: "65.21.130.86"
+            privateAddress: "65.21.130.86"
+          - publicAddress: "65.21.130.85"
+            privateAddress: "65.21.130.85"
+
