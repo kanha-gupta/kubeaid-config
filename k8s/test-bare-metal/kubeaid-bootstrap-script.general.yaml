@@ -21,6 +21,10 @@ cluster:
       kubeaid:
         privateKeyFilePath: "/Users/dev/.ssh/id_rsa"
 
+kubePrometheus:
+  version: v0.16.0
+  grafanaURL:
+
 cloud:
   bare-metal:
     ssh:
