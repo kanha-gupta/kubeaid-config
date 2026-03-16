@@ -11,7 +11,7 @@ forkURLs:
 
 cluster:
   name: test-local
-  k8sVersion: v1.35.0
+  k8sVersion: v1.34.5
   argoCD:
     deployKeys:
       kubeaidConfig:
@@ -23,7 +23,7 @@ cloud:
   local: {}
 
 kubePrometheus:
-  version: v0.15.0
+  version: v0.16.0
   grafanaURL:
 
 
