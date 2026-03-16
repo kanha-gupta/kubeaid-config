@@ -1,5 +1,4 @@
 git:
-  # Path to your GitHub SSH key for pulling repos
   privateKeyFilePath: "/Users/dev/.ssh/id_rsa"
 
 forkURLs:
@@ -13,7 +12,7 @@ forkURLs:
 cluster:
   type: "workload"
   name: "test-bare-metal"
-  k8sVersion: "1.33.0"
+  k8sVersion: "v1.34.0"
   enableAuditLogging: true
   argoCD:
     deployKeys:
@@ -27,7 +26,6 @@ cloud:
     ssh:
       port: 22
       privateKey:
-        # Your specific key for these servers
         privateKeyFilePath: "/Users/dev/enableit/test-kubeaid-cli/robot-priv"
 
     controlPlane:
