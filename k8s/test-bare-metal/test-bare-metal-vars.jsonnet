@@ -6,7 +6,7 @@
   connect_keda: false,
   grafana_keycloak_enable: false,
   grafana_root_url: "",
-  kube_prometheus_version: "",
+  kube_prometheus_version: "v0.16.0",
   enable_custom_metrics_apiservice: true,
   prometheus_operator_resources+: {
     limits: { memory: "80Mi" },
